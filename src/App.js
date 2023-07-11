@@ -1,35 +1,73 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Mousewheel, Pagination, Navigation } from "swiper/modules";
+import { ThemeProvider, styled } from "styled-components";
+import { theme } from "./Theme";
+import { loadMovies } from "service/api";
+import MovieCard from "components/MovieCard";
 
-async function loadMovies() {
-  try {
-    const data = await axios(
-      "https://api.themoviedb.org/3/account/{Hiyiragi}/favorite/movies"
-    );
-    return data;
-  } catch (err) {
-    throw Error("Failed to load radio!");
-  }
-}
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import { getStorageValue, setStorageValue } from "service/localStorage";
+
+// import required modules
 
 function App() {
-  const [data, setData] = useState(null);
+  const [state, setState] = useState({
+    movies: null,
+    saved: getStorageValue("savedMovies") || [],
+  });
+  // const [movies, setMovies] = useState(null);
+  // const [saved, setSaved] = useState(getStorageValue("savedMovies"));
+
+  const toggleSavedMovie = (clickedId) => {
+    console.log(state.saved.length);
+    const movieIndex = state.saved.indexOf(clickedId);
+    if (movieIndex >= 0) {
+      const newSaved = [...state.saved];
+      newSaved.splice(movieIndex, 1);
+      setState({
+        ...state,
+        saved: newSaved,
+      });
+    } else {
+      setState({ ...state, saved: [...state.saved, clickedId] });
+    }
+  };
+
+  console.log(state.saved);
+
+  useEffect(() => {
+    setStorageValue("savedMovies", state.saved);
+  }, [state.saved]);
+
   useEffect(() => {
     const loadData = async () => {
-      // try {
       const data = await loadMovies();
-      setData(data);
-      // } catch (err) {
-      //   toas.error(err.message);
-      // } finally {
-      //   setIsLoading(false);
-      // }
+      setState({ ...state, movies: data });
     };
 
     loadData();
   }, []);
-  console.log(data);
-  return <div>HI</div>;
+
+  return (
+    <ThemeProvider theme={theme}>
+      {state.movies &&
+        state.movies.map((movie) => (
+          <MovieCard
+            key={movie?.id}
+            clickedId={movie?.id}
+            originalTitle={movie?.original_title}
+            image={movie?.backdrop_path}
+            releaseDate={movie?.release_date}
+            overview={movie?.overview}
+            genresList={movie?.genre_ids}
+            toggleSavedMovie={toggleSavedMovie}
+          ></MovieCard>
+        ))}
+    </ThemeProvider>
+  );
 }
 
 export default App;
