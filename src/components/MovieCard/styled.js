@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 export const Wrapper = styled.div`
   width: 50%;
   background-color: ${({ theme }) => theme.colors.lightGrey};
-  margin: 100px auto;
+  margin: 250px auto;
   padding: 30px;
   display: flex;
   flex-direction: column;

@@ -52,21 +52,27 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Swiper
-        pagination={true}
-        modules={[Pagination]}
+        direction={"vertical"}
+        slidesPerView={1}
+        spaceBetween={30}
         mousewheel={true}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[Mousewheel, Pagination]}
         className="mySwiper"
+        style={{ height: "900px" }}
       >
         {state.movies &&
           state.movies.map((movie) => (
             <SwiperSlide
+              key={movie?.id}
               style={{
                 width: "100%",
                 height: "100%",
               }}
             >
               <MovieCard
-                key={movie?.id}
                 clickedId={movie?.id}
                 originalTitle={movie?.original_title}
                 image={movie?.backdrop_path}
