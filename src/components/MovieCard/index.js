@@ -21,6 +21,7 @@ function MovieCard({
   genresList,
   clickedId,
   toggleSavedMovie,
+  isSaved,
 }) {
   const getGenres = () => {
     let allGenres = [];
@@ -58,10 +59,10 @@ function MovieCard({
           <SmallText>Share</SmallText>
         </Button>
         <Button>
-          <SmallText>Like</SmallText>
+          <SmallText>Comment</SmallText>
         </Button>
         <Button onClick={() => toggleSavedMovie(clickedId)}>
-          <SmallText>Save</SmallText>
+          <SmallText>{isSaved ? "Unsave" : "Save"}</SmallText>
         </Button>
       </ButtonWrapper>
     </Wrapper>

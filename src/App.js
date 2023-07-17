@@ -36,8 +36,6 @@ function App() {
     }
   };
 
-  console.log(state.saved);
-
   useEffect(() => {
     setStorageValue("savedMovies", state.saved);
   }, [state.saved]);
@@ -53,19 +51,34 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {state.movies &&
-        state.movies.map((movie) => (
-          <MovieCard
-            key={movie?.id}
-            clickedId={movie?.id}
-            originalTitle={movie?.original_title}
-            image={movie?.backdrop_path}
-            releaseDate={movie?.release_date}
-            overview={movie?.overview}
-            genresList={movie?.genre_ids}
-            toggleSavedMovie={toggleSavedMovie}
-          ></MovieCard>
-        ))}
+      <Swiper
+        pagination={true}
+        modules={[Pagination]}
+        mousewheel={true}
+        className="mySwiper"
+      >
+        {state.movies &&
+          state.movies.map((movie) => (
+            <SwiperSlide
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <MovieCard
+                key={movie?.id}
+                clickedId={movie?.id}
+                originalTitle={movie?.original_title}
+                image={movie?.backdrop_path}
+                releaseDate={movie?.release_date}
+                overview={movie?.overview}
+                genresList={movie?.genre_ids}
+                toggleSavedMovie={toggleSavedMovie}
+                isSaved={state.saved.includes(movie.id)}
+              ></MovieCard>
+            </SwiperSlide>
+          ))}
+      </Swiper>
     </ThemeProvider>
   );
 }
