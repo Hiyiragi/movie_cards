@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Wrapper,
   InfoWrapper,
@@ -10,7 +10,6 @@ import {
 import PropTypes from "prop-types";
 import { SmallText, Text } from "components/UI/Typography";
 import { theme } from "Theme";
-import { genres } from "common/genres";
 import Button from "components/UI/Button";
 
 function MovieCard({
@@ -18,26 +17,11 @@ function MovieCard({
   image,
   releaseDate,
   overview,
-  genresList,
+  movieGenresText,
   clickedId,
   toggleSavedMovie,
   isSaved,
 }) {
-  const getGenres = () => {
-    let allGenres = [];
-    for (let i of genresList) {
-      for (let j of genres) {
-        if (i === j.id) {
-          allGenres.push(j.name);
-        }
-      }
-    }
-    return allGenres;
-  };
-  const allGenresList = getGenres();
-
-  const allGenres = allGenresList.join(", ");
-
   return (
     <Wrapper>
       <InfoWrapper>
@@ -50,7 +34,7 @@ function MovieCard({
           <SmallText
             style={{ color: theme.colors.secondaryGrey }}
           >{`${releaseDate?.slice(0, 4)}`}</SmallText>
-          <Genres>{allGenres}</Genres>
+          <Genres>{movieGenresText}</Genres>
         </MovieInfo>
       </InfoWrapper>
       <Summary>{overview}</Summary>

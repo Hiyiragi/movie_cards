@@ -4,7 +4,6 @@ export function setStorageValue(key, value) {
 
 export function getStorageValue(key) {
   const value = window.localStorage.getItem(key);
-  console.log(value);
   const parsedValue = JSON.parse(value);
   return parsedValue;
 }

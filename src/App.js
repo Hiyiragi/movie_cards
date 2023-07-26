@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel, Pagination, Navigation } from "swiper/modules";
-import { ThemeProvider, styled } from "styled-components";
+import { Mousewheel, Pagination } from "swiper/modules";
+import { ThemeProvider } from "styled-components";
 import { theme } from "./Theme";
 import { loadMovies } from "service/api";
 import MovieCard from "components/MovieCard";
+import { getStorageValue, setStorageValue } from "service/localStorage";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import { getStorageValue, setStorageValue } from "service/localStorage";
-
-// import required modules
+import { genres } from "common/genres";
 
 function App() {
   const [state, setState] = useState({
@@ -43,7 +42,7 @@ function App() {
   useEffect(() => {
     const loadData = async () => {
       const data = await loadMovies();
-      setState({ ...state, movies: data });
+      setState((state) => ({ ...state, movies: data }));
     };
 
     loadData();
@@ -78,10 +77,13 @@ function App() {
                 image={movie?.backdrop_path}
                 releaseDate={movie?.release_date}
                 overview={movie?.overview}
-                genresList={movie?.genre_ids}
+                movieGenresText={genres
+                  .filter((genre) => movie?.genre_ids.includes(genre.id))
+                  .map((genre) => genre.name)
+                  .join(", ")}
                 toggleSavedMovie={toggleSavedMovie}
                 isSaved={state.saved.includes(movie.id)}
-              ></MovieCard>
+              />
             </SwiperSlide>
           ))}
       </Swiper>
